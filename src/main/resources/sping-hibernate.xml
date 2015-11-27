@@ -12,6 +12,7 @@
     <bean name="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="jdbcUrl" value="${jdbc_url}"/>
         <property name="user" value="${jdbc_username}"/>
+        <property name="driverClass" value="${driverClassName}" />
         <property name="password" value="${jdbc_password}"/>
 
 

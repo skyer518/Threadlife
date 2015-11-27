@@ -31,5 +31,9 @@
     <!-- 对于WebLogic,Orion,OC4J此属性应该设置成true -->
     <constant name="struts.dispatcher.parametersWorkaround" value="false"/>
 
-    <package name="basePackage" extends="struts-default">
+    <!--<package name="default" namespace="/" extends="struts-default">
+        <action name="customer" class="cn.com.u2be.threadlife.action.CustomerAction" method="customer">
+            <result name="success">/customer.jsp</result>
+        </action>
+    </package>-->
 </struts>

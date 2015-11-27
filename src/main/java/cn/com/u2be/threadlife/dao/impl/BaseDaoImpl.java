@@ -1,66 +1,128 @@
 package cn.com.u2be.threadlife.dao.impl;
 
 import cn.com.u2be.threadlife.dao.BaseDao;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 /**
- * BaseDaoImpl 定义DAO的通用操作的实现
- *
- * @author Monday
+ * 提供hibernate dao的所有操作,<br>
+ * 实现类由spring注入HibernateEntityDao和HibernateGenericDao来实现
  */
-@SuppressWarnings("unchecked")
-public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
+@Repository
+public class BaseDaoImpl<T, PK extends Serializable> extends HibernateDaoSupport implements BaseDao<T, PK> {
 
-    private Class<T> clazz;
 
-    /**
-     * 通过构造方法指定DAO的具体实现类
-     */
-    public BaseDaoImpl() {
-        ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
-        clazz = (Class<T>) type.getActualTypeArguments()[0];
-        System.out.println("DAO的真实实现类是：" + this.clazz.getName());
+    @Resource
+    public void setSF(SessionFactory sessionFactory) {
+        super.setSessionFactory(sessionFactory);
     }
 
-//	/**
-//	 * 向DAO层注入SessionFactory
-//	 */
-//	@Resource
-//	private SessionFactory sessionFactory;
-
-//	/**
-//	 * 获取当前工作的Session
-//	 */
-//	protected Session getSession() {
-//		return this.sessionFactory.getCurrentSession();
-//	}
-
-    public void save(T entity) {
-        this.getSession().save(entity);
+    @Override
+    public List<T> getAll(Class<T> entityClass) {
+        return getHibernateTemplate().loadAll(entityClass);
     }
 
+    @Override
+    public List<T> getAll(Class<T> entityClass, String orderBy, boolean isAsc) {
+        Assert.hasText(orderBy);
+        if (isAsc)
+            return (List<T>) getHibernateTemplate().findByCriteria(
+                    DetachedCriteria.forClass(entityClass).addOrder(Order.asc(orderBy)));
+        else
+            return (List<T>) getHibernateTemplate().findByCriteria(
+                    DetachedCriteria.forClass(entityClass).addOrder(Order.desc(orderBy)));
+    }
+
+    @Override
+    public void removeById(Class<T> entityClass, PK id) {
+        getHibernateTemplate().delete(get(entityClass, id));
+    }
+
+    @Override
+    public Criteria createCriteria(Criterion... criterions) {
+        return null;
+    }
+
+    @Override
+    public Criteria createCriteria(String orderBy, boolean isAsc, Criterion... criterions) {
+        return null;
+    }
+
+    @Override
+    public List<T> findBy(String propertyName, Object value) {
+        return null;
+    }
+
+    @Override
+    public List<T> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
+        return null;
+    }
+
+    @Override
+    public T findUniqueBy(String propertyName, Object value) {
+        return null;
+    }
+
+    @Override
+    public boolean isUnique(T entity, String uniquePropertyNames) {
+        return false;
+    }
+
+    @Override
+    public void evit(T entity) {
+        getHibernateTemplate().evict(entity);
+    }
+
+    @Override
+    public T get(Class<T> entityClass, PK id) {
+        return getHibernateTemplate().get(entityClass, id);
+    }
+
+    @Override
+    public void save(T o) {
+        getHibernateTemplate().save(o);
+    }
+
+    @Override
+    public void remove(T o) {
+        getHibernateTemplate().delete(o);
+    }
+
+    @Override
+    public void flush() {
+        getHibernateTemplate().flush();
+    }
+
+    @Override
+    public void clear() {
+        getHibernateTemplate().clear();
+    }
+
+    @Override
+    public Query createQuery(String hql, Object... values) {
+        return null;
+    }
+
+    @Override
+    public List find(String hql, Object... values) {
+        return null;
+    }
+
+    @Override
     public void update(T entity) {
-        this.getSession().update(entity);
+        getHibernateTemplate().update(entity);
     }
 
-    public void delete(Serializable id) {
-        this.getSession().delete(this.findById(id));
-    }
 
-    public T findById(Serializable id) {
-        return (T) this.getSession().get(this.clazz, id);
-    }
-
-    public List<T> findByHQL(String hql, Object... params) {
-        Query query = this.getSession().createQuery(hql);
-        for (int i = 0; params != null && i < params.length; i++) {
-            query.setParameter(i, params);
-        }
-        return query.list();
-    }
 }

@@ -1,12 +1,7 @@
 <component name="ArtifactManager">
   <artifact type="war" name="Threadlife:war">
-    <output-path>$PROJECT_DIR$/out/artifacts/Threadlife_war</output-path>
-    <root id="archive" name="Threadlife_war.war">
-      <element id="directory" name="WEB-INF">
-        <element id="directory" name="classes">
-          <element id="module-output" name="Threadlife" />
-        </element>
-      </element>
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="threadlife.war">
       <element id="artifact" artifact-name="Threadlife:war exploded" />
     </root>
   </artifact>

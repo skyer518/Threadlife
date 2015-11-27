@@ -8,5 +8,6 @@
     <context:property-placeholder location="classpath:config.properties"/>
 
     <!--自动扫描dao 与 service (自动注入)-->
-    <context:component-scan base-package="cn.com.u2be.threadlife.biz,cn.com.u2be.threadlife.dao"/>
+    <context:component-scan base-package="cn.com.u2be.threadlife.biz,cn.com.u2be.threadlife.dao,cn.com.u2be.threadlife.action"/>
+    <import resource="sping-hibernate.xml" />
 </beans>
