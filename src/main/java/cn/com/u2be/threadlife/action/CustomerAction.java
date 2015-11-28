@@ -2,12 +2,11 @@ package cn.com.u2be.threadlife.action;
 
 import cn.com.u2be.threadlife.biz.CustomerBiz;
 import cn.com.u2be.threadlife.entity.Customer;
+import cn.com.u2be.threadlife.util.PageUtil;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
@@ -24,6 +23,12 @@ public class CustomerAction {
     @Resource
     private CustomerBiz customerBiz;
 
+    private PageUtil page;
+
+    private int pageNo = 1;
+    private int size = 1;
+
+
     private Customer customer;
 
     private List<Customer> customerList;
@@ -32,7 +37,18 @@ public class CustomerAction {
             @Result(name = "success", location = "/customer.jsp")
     })
     public String customer() {
+
         customerList = customerBiz.getCustomerList();
+        return "success";
+    }
+
+    @Action(value = "customer_page", results = {
+            @Result(name = "success", location = "/customer_page.jsp")
+    })
+    public String customer_page() {
+
+        page = customerBiz.getCustomerByPage(size, pageNo);
+        customerList = (List<Customer>) page.getResult();
         return "success";
     }
 
@@ -63,5 +79,29 @@ public class CustomerAction {
 
     public CustomerBiz getCustomerBiz() {
         return this.customerBiz;
+    }
+
+    public PageUtil getPage() {
+        return this.page;
+    }
+
+    public void setPage(PageUtil page) {
+        this.page = page;
+    }
+
+    public int getPageNo() {
+        return this.pageNo;
+    }
+
+    public void setPageNo(int pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public int getSize() {
+        return this.size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }

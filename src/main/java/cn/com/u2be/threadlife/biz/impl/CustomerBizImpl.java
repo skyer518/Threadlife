@@ -3,8 +3,7 @@ package cn.com.u2be.threadlife.biz.impl;
 import cn.com.u2be.threadlife.biz.CustomerBiz;
 import cn.com.u2be.threadlife.dao.CustomerDao;
 import cn.com.u2be.threadlife.entity.Customer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import cn.com.u2be.threadlife.util.PageUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,6 +23,11 @@ public class CustomerBizImpl implements CustomerBiz {
 
     public Customer getCustomer(Long id) {
         return customerDao.getCustomer(id);
+    }
+
+    @Override
+    public PageUtil getCustomerByPage(int size, int pageNo) {
+        return customerDao.pagedQuery(pageNo, size);
     }
 
     public void setCustomerDao(CustomerDao customerDao) {

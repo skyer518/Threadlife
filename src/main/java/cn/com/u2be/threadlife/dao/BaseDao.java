@@ -1,5 +1,6 @@
 package cn.com.u2be.threadlife.dao;
 
+import cn.com.u2be.threadlife.util.PageUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
@@ -15,84 +16,76 @@ import java.util.List;
 public interface BaseDao<T, PK extends Serializable> {
 
     /**
-     * 获取全部对象
+     * 根据ID获取对象. 实际调用Hibernate的session.load()方法返回实体或其proxy对象. 如果对象不存在，抛出异常.
      */
-    public List<T> getAll(Class<T> entityClass);
+    T get(PK id);
+
 
     /**
-     * 获取全部对象,带排序参数.
+     * 保存对象.
      */
-    public List<T> getAll(Class<T> entityClass,String orderBy, boolean isAsc);
+    void save(T o);
+
+    /**
+     * 在不同的session中关联修改过的托管对象
+     */
+    void update(T entity);
+
+    /**
+     * 删除对象.
+     */
+    void remove(T o);
 
     /**
      * 根据ID移除对象.
      */
-    public void removeById(Class<T> entityClass,PK id);
+    void removeById(PK id);
 
     /**
-     * 取得Entity的Criteria.
+     * 消除与 Hibernate Session 的关联
      */
-    public Criteria createCriteria(Criterion... criterions);
+    void evit(T entity);
+
+    void flush();
+
+    void clear();
 
     /**
-     * 取得Entity的Criteria,带排序参数.
+     * 获取全部对象
      */
-    public Criteria createCriteria(String orderBy, boolean isAsc,
-                                   Criterion... criterions);
+    List<T> getAll();
+
+    /**
+     * 获取全部对象,带排序参数.
+     */
+    List<T> getAll(String orderBy, boolean isAsc);
 
     /**
      * 根据属性名和属性值查询对象.
      *
      * @return 符合条件的对象列表
      */
-    public List<T> findBy(String propertyName, Object value);
+    List<T> findBy(String propertyName, Object value);
 
     /**
      * 根据属性名和属性值查询对象,带排序参数.
      *
      * @return 符合条件的对象列表
      */
-    public List<T> findBy(String propertyName, Object value, String orderBy,
-                          boolean isAsc);
-
-    /**
-     * 根据属性名和属性值查询单个对象.
-     *
-     * @return 符合条件的唯一对象 or null
-     */
-    public T findUniqueBy(String propertyName, Object value);
-
-    /**
-     * 判断对象某些属性的值在数据库中唯一.
-     *
-     * @param uniquePropertyNames 在POJO里不能重复的属性列表,以逗号分割 如"name,loginid,password"
-     */
-    public boolean isUnique(T entity, String uniquePropertyNames);
-
-    /**
-     * 消除与 Hibernate Session 的关联
-     */
-    public void evit(T entity);
+    List<T> findBy(String propertyName, Object value, String orderBy,
+                   boolean isAsc);
 
 
     /**
-     * 根据ID获取对象. 实际调用Hibernate的session.load()方法返回实体或其proxy对象. 如果对象不存在，抛出异常.
+     * 取得Entity的Criteria.
      */
-    public T get(Class<T> entityClass,PK id);
+    Criteria createCriteria(Criterion... criterions);
 
     /**
-     * 保存对象.
+     * 取得Entity的Criteria,带排序参数.
      */
-    public void save(T o);
-
-    /**
-     * 删除对象.
-     */
-    public void remove(T o);
-
-    public void flush();
-
-    public void clear();
+    Criteria createCriteria(String orderBy, boolean isAsc,
+                            Criterion... criterions);
 
     /**
      * 创建Query对象. 对于需要first,max,fetchsize,cache,cacheRegion等诸多设置的函数,可以在返回Query后自行设置.
@@ -110,18 +103,81 @@ public interface BaseDao<T, PK extends Serializable> {
      *
      * @param values 可变参数.
      */
-    public Query createQuery(String hql, Object... values);
+    Query createQuery(String hql, Object... values);
 
 
     /**
      * 根据hql查询,直接使用HibernateTemplate的find函数.
      */
     @SuppressWarnings("unchecked")
-    public List find(String hql, Object... values);
+    List find(String hql, Object... values);
 
 
     /**
-     * 在不同的session中关联修改过的托管对象
+     * 分页查询函数，使用hql.
+     *
+     * @param pageNo 页号,从1开始.
      */
-    public void update(T entity);
+    PageUtil pagedQuery(String hql, int pageNo, int pageSize, Object... values);
+
+    /**
+     * @param hql      查询sql
+     * @param start    分页从哪一条数据开始
+     * @param pageSize 每一个页面的大小
+     * @param values   查询条件
+     * @return page对象
+     */
+    PageUtil dataQuery(String hql, int start, int pageSize, Object... values);
+
+    /**
+     * 分页查询函数，使用已设好查询条件与排序的<code>Criteria</code>.
+     *
+     * @param pageNo 页号,从1开始.
+     * @return 含总记录数和当前页数据的Page对象.
+     */
+    PageUtil pagedQuery(Criteria criteria, int pageNo, int pageSize);
+
+    /**
+     * 分页查询函数，根据entityClass和查询条件参数创建默认的<code>Criteria</code>.
+     *
+     * @param pageNo 页号,从1开始.
+     * @return 含总记录数和当前页数据的Page对象.
+     */
+    @SuppressWarnings("unchecked")
+    PageUtil pagedQuery(int pageNo, int pageSize, Criterion... criterions);
+
+    /**
+     * 分页查询函数，根据entityClass和查询条件参数,排序参数创建默认的<code>Criteria</code>.
+     *
+     * @param pageNo 页号,从1开始.
+     * @return 含总记录数和当前页数据的Page对象.
+     */
+    @SuppressWarnings("unchecked")
+    PageUtil pagedQuery(int pageNo, int pageSize, String orderBy, boolean isAsc,
+                        Criterion... criterions);
+
+
+    /**
+     * 根据属性名和属性值查询单个对象.
+     *
+     * @return 符合条件的唯一对象 or null
+     */
+    T findUniqueBy(String propertyName, Object value);
+
+    /**
+     * 判断对象某些属性的值在数据库中唯一.
+     *
+     * @param uniquePropertyNames 在POJO里不能重复的属性列表,以逗号分割 如"name,loginid,password"
+     */
+    boolean isUnique(T entity, String uniquePropertyNames);
+
+    /**
+     * 取得对象的主键值,辅助函数.
+     */
+    Serializable getId(Class entityClass, Object entity);
+
+    /**
+     * 取得对象的主键名,辅助函数.
+     */
+    String getIdName(Class clazz);
 }

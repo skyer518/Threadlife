@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Ã÷ on 2015/11/26.
  */
-public interface CustomerDao {
+public interface CustomerDao extends BaseDao<Customer, Long> {
 
     Customer getCustomer(long id);
 

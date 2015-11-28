@@ -1,6 +1,7 @@
 package cn.com.u2be.threadlife.biz;
 
 import cn.com.u2be.threadlife.entity.Customer;
+import cn.com.u2be.threadlife.util.PageUtil;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface CustomerBiz {
     List<Customer> getCustomerList();
 
     Customer getCustomer(Long id);
+
+    PageUtil getCustomerByPage(int size, int pageNo);
 }

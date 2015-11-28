@@ -14,10 +14,10 @@ public class CustomerDaoImpl extends BaseDaoImpl<Customer, Long> implements Cust
 
 
     public Customer getCustomer(long id) {
-        return get(Customer.class, id);
+        return get(id);
     }
 
     public List<Customer> getCustomerList() {
-        return getAll(Customer.class);
+        return getAll();
     }
 }
