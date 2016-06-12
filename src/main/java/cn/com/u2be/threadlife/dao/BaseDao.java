@@ -24,7 +24,7 @@ public interface BaseDao<T, PK extends Serializable> {
     /**
      * 保存对象.
      */
-    void save(T o);
+    PK save(T o);
 
     /**
      * 在不同的session中关联修改过的托管对象

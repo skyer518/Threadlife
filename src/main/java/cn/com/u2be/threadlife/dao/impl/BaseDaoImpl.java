@@ -130,8 +130,8 @@ public class BaseDaoImpl<T, PK extends Serializable> extends HibernateDaoSupport
     }
 
     @Override
-    public void save(T o) {
-        getHibernateTemplate().save(o);
+    public PK save(T o) {
+        return (PK) getHibernateTemplate().save(o);
     }
 
     @Override
