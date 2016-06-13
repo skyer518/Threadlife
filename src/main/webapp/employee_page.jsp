@@ -29,14 +29,14 @@
         <td>邮件</td>
         <td>操作</td>
     </tr>
-    <c:forEach items="${customerList}" var="customer" varStatus="step">
+    <c:forEach items="${employeeList}" var="employee" varStatus="step">
         <tr>
             <td>${step.count}</td>
-            <td>${customer.name}</td>
-            <td>${customer.contact}</td>
-            <td>${customer.telephone}</td>
-            <td>${customer.email}</td>
-            <td><a href="customer_show.action?customer.id=${customer.id}">详细</a></td>
+            <td>${employee.name}</td>
+            <td>${employee.contact}</td>
+            <td>${employee.telephone}</td>
+            <td>${employee.email}</td>
+            <td><a href="employee_show.action?employee.id=${employee.id}">详细</a></td>
         </tr>
 
     </c:forEach>
@@ -44,12 +44,12 @@
     <tr>
 
         <c:if test="${1<page.currentPageNo}">
-            <td><a href="customer_page.action?pageNo=${page.currentPageNo-1}&size=${size}">《 上一页</a></td>
+            <td><a href="employee_page.action?pageNo=${page.currentPageNo-1}&size=${size}">《 上一页</a></td>
         </c:if>
 
         <td> ${page.currentPageNo}</td>
         <c:if test="${page.totalPageCount>page.currentPageNo}">
-            <td><a href="customer_page.action?pageNo=${page.currentPageNo+1}&size=${size}">下一页 》</a></td>
+            <td><a href="employee_page.action?pageNo=${page.currentPageNo+1}&size=${size}">下一页 》</a></td>
         </c:if>
 
     </tr>
@@ -70,14 +70,14 @@
         <td>操作</td>
     </tr>
 
-    <s:iterator value="customerList" status="st">
+    <s:iterator value="employeeList" status="st">
         <tr>
             <td><s:property value="#st.count"/></td>
             <td><s:property value="name"/></td>
             <td><s:property value="contact"/></td>
             <td><s:property value="telephone"/></td>
             <td><s:property value="email"/></td>
-            <td><a href="customer_show.action?customer.id=<s:property value='id'/>">详细</a></td>
+            <td><a href="employee_show.action?employee.id=<s:property value='id'/>">详细</a></td>
         </tr>
 
     </s:iterator>

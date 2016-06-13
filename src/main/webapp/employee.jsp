@@ -14,8 +14,8 @@
 </head>
 <body>
 
-<h1>用户列表</h1>
-
+<h1 align="center">员工列表</h1>
+<a href="employee_add.jsp">添加员工</a>
 <table border="1px" align="center">
     <thead>
     <th colspan="6">
@@ -29,19 +29,20 @@
         <td>邮件</td>
         <td>操作</td>
     </tr>
-    <c:forEach items="${customerList}" var="customer" varStatus="step">
+    <c:forEach items="${employeeList}" var="employee" varStatus="step">
         <tr>
             <td>${step.count}</td>
-            <td>${customer.name}</td>
-            <td>${customer.contact}</td>
-            <td>${customer.telephone}</td>
-            <td>${customer.email}</td>
-            <td><a href="customer_show.action?customer.id=${customer.id}">详细</a></td>
+            <td>${employee.name}</td>
+            <td>${employee.contact}</td>
+            <td>${employee.telephone}</td>
+            <td>${employee.email}</td>
+            <td><a href="employee_show.action?employee.id=${employee.id}">详细</a></td>
         </tr>
 
     </c:forEach>
 </table>
-<table border="1px">
+<br/>
+<table border="1px" align="center">
     <thead>
 
     <th colspan="6"><h3> s:iterator </h3>
@@ -56,19 +57,18 @@
         <td>操作</td>
     </tr>
 
-    <s:iterator value="customerList" status="st" >
+    <s:iterator value="employeeList" status="st">
         <tr>
             <td><s:property value="#st.count"/></td>
             <td><s:property value="name"/></td>
             <td><s:property value="contact"/></td>
             <td><s:property value="telephone"/></td>
             <td><s:property value="email"/></td>
-            <td><a href="customer_show.action?customer.id=<s:property value='id'/>">详细</a></td>
+            <td><a href="employee_show.action?employee.id=<s:property value='id'/>">详细</a></td>
         </tr>
 
     </s:iterator>
 </table>
-
 
 </body>
 </html>

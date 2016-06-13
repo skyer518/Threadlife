@@ -17,7 +17,7 @@
     <!-- 设置浏览器是否缓存静态内容(开发时设置为false,发布到生产环境后设置为true) -->
     <constant name="struts.serve.static.browserCache" value="false"/>
     <!-- 请求参数的编码方式 -->
-    <constant name="struts.i18n.encoding" value="utf-8"/>
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
     <!-- 每次HTTP请求系统都重新加载资源文件，有助于开发(开发时设置为true,发布到生产环境后设置为false) -->
     <constant name="struts.i18n.reload" value="true"/>
     <!-- 文件上传最大值 -->
@@ -33,7 +33,7 @@
 
     <!--<package name="default" namespace="/" extends="struts-default">
         <action name="customer" class="cn.com.u2be.threadlife.action.CustomerAction" method="customer">
-            <result name="success">/customer.jsp</result>
+            <result name="success">/employee.jsp</result>
         </action>
     </package>-->
 </struts>
